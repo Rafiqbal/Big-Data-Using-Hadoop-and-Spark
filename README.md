@@ -110,6 +110,12 @@ is        2
 powerful. 1
 fast.     1
 ```
+
+### Key Learning 
+- Understanding how HDFS stores data in a distributed manner.
+- Learning how Hadoop's MapReduce framework processes large datasets.
+- Running a basic WordCount job to analyze text data.
+
 ### Resources 
 LAB2.pdf file = https://github.com/Rafiqbal/Big-Data-Using-Hadoop-and-Spark/blob/main/LAB2.pdf
 
@@ -204,6 +210,10 @@ drop 'student_info'
 ```bash
 list
 ```
+### Key Learning 
+- Understanding HBase as a NoSQL database for big data.
+- Learning how to create, modify, and delete tables and records in HBase.
+- Using HBase commands to perform CRUD (Create, Read, Update, Delete) operations.
 
 ### Resources
 - LAB3.pdf file - https://github.com/Rafiqbal/Big-Data-Using-Hadoop-and-
@@ -275,7 +285,112 @@ hdfs dfs -ls /spark_output
 ```bash
 hdfs dfs -cat /spark_output/part-00000
 ```
-Resources 
+### Key Learning Outcome 
+- Understanding how HDFS stores and retrieves data.
+- Running a Hadoop MapReduce job to process text files.
+- Using Apache Spark to process data faster than traditional MapReduce.
+- Learning how Spark performs in-memory processing for efficiency.
+
+### Resources 
 - LAB4.pdf - https://github.com/Rafiqbal/Big-Data-Using-Hadoop-and-Spark/blob/main/LAB4.pdf
 
+# Final Assignment: Climate Analysis Using Weather Data Repository  
 
+## Objective  
+This project focuses on analyzing **global weather and air quality data** using big data tools. The goal is to:  
+- **Store large datasets in HBase**  
+- **Query and analyze temperature trends and air quality index (PM2.5)**  
+- **Extract meaningful insights from real-world data**  
+
+## Technologies Used  
+- **HBase (NoSQL Database)**  
+- **Hadoop Distributed File System (HDFS)**  
+- **Apache Spark**  
+- **Linux Command Line (Terminal)**  
+
+## Steps & Commands  
+
+### 1. Creating HBase Table for Weather Data  
+- Start HBase shell:  
+  ```bash
+  hbase shell
+  ```
+- Create an HBase table named Weather_Data with the following column families:
+``` bash
+create 'Weather_Data', 'location_info', 'timestamps', 'weather_data', 'air_quality'
+```
+- Verify table creation:
+```bash
+list
+```
+### 2. Uploading CSV Data to HDFS
+- Create a directory for the dataset:
+```bash
+hdfs dfs -mkdir /Dataset
+```
+- Upload the CSV file into HDFS:
+```bash
+hdfs dfs -put WeatherData.csv /Dataset/
+```
+- Verify the uploaded file:
+```bash
+hdfs dfs -ls /Dataset
+```
+### 3. Importing Data from HDFS to HBase
+- Load the CSV data into the HBase table using:
+``` bash
+hbase org.apache.hadoop.hbase.mapreduce.ImportTsv -Dimporttsv.columns="HBASE_ROW_KEY,location_info:country,location_info:city,timestamps:date,weather_data:temperature,air_quality:pm2.5" -Dimporttsv.separator=',' Weather_Data /Dataset/WeatherData.csv
+```
+- Check if the data is successfully imported:
+```bash
+scan 'Weather_Data'
+```
+### 4. Analyzing Global Temperature Change
+- Retrieve the top 2 highest recorded temperatures:
+```bash
+scan 'Weather_Data', {FILTER => "SingleColumnValueFilter('weather_data', 'temperature', >=, 'binary:47.9')"}
+```
+- Retrieve temperature trends for Malaysia:
+```bash
+scan 'Weather_Data', {FILTER => "PrefixFilter('Malaysia')"}
+```
+### 5. Analyzing Air Quality Index (PM2.5)
+- Find countries with the worst air quality:
+```bash
+scan 'Weather_Data', {FILTER => "SingleColumnValueFilter('air_quality', 'pm2.5', >=, 'binary:500')"}
+```
+- Analyze Malaysia’s air pollution trends:
+```bash
+scan 'Weather_Data', {FILTER => "PrefixFilter('Malaysia') AND SingleColumnValueFilter('air_quality', 'pm2.5', >=, 'binary:55.5')"}
+```
+- Find highest PM2.5 value in Malaysia:
+```bash
+scan 'Weather_Data', {FILTER => "SingleColumnValueFilter('air_quality', 'pm2.5', >=, 'binary:200')"}
+```
+### 6. Exporting Processed Data for Visualization
+- Export air quality trends to a file:
+```bash
+echo "Exporting Malaysia Air Quality Trends" > malaysia_air_quality.txt
+scan 'Weather_Data', {FILTER => "PrefixFilter('Malaysia')"} >> malaysia_air_quality.txt
+```
+### Expected Output
+
+- Temperature Analysis Example:
+Country   Temperature (°C)  
+Kuwait    49.2  
+Iraq      49.1  
+Malaysia  34.3  
+
+- Air Quality Analysis Example:
+Country   PM2.5 Value  
+Indonesia 800 µg/m³  
+Chile     600 µg/m³  
+Malaysia  387 µg/m³  
+
+### Key Learning Outcomes
+- Used HBase to store large-scale structured climate data.
+- Queried and analyzed temperature and air quality trends.
+- Extracted insights from real-world weather datasets using big data tools.
+
+#### Resources
+- 
