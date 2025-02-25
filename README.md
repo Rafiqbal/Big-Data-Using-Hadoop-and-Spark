@@ -111,4 +111,99 @@ powerful. 1
 fast.     1
 ```
 ### Resources 
-LAB2.pdf file = 
+LAB2.pdf file = https://github.com/Rafiqbal/Big-Data-Using-Hadoop-and-Spark/blob/main/LAB2.pdf
+
+# Lab 3: HBase Table Creation
+
+## Objective  
+This lab focuses on **creating and managing an HBase table** in a Hadoop environment. The goal is to learn how to:  
+- **Create an HBase table**  
+- **Insert, update, delete, and retrieve records**  
+- **Work with column families and schema design in HBase**  
+
+## Technologies Used  
+- **HBase (NoSQL Database)**  
+- **Hadoop Distributed File System (HDFS)**  
+- **Cloudera VM**  
+- **Linux Command Line (Terminal)**  
+
+## Steps & Commands  
+
+### 1. Starting HBase  
+- Open a terminal and start the HBase shell:  
+
+  ```bash
+  hbase shell
+  ```
+
+- Check if HBase is running by listing active tables:
+  ```bash
+  list
+  ```
+
+### 2. Creating an HBase Table
+- Create a table named "student_info" with column families: personal, name, age, and gender:
+  ```bash
+  create 'student_info', 'personal', 'name', 'age', 'gender'
+  ```
+- Verify the table creation:
+  ```bash
+  list
+  ```
+### 3. Inserting Data into the Table
+- nsert student records into the student_info table:
+  ```bash
+  put 'student_info', '1', 'name:first', 'John'
+  put 'student_info', '1', 'name:last', 'Doe'
+  put 'student_info', '1', 'age', '22'
+  put 'student_info', '1', 'gender', 'Male'
+  ```
+- Verify the table creation:
+```bash
+put 'student_info', '2', 'name:first', 'Alice'
+put 'student_info', '2', 'name:last', 'Smith'
+put 'student_info', '2', 'age', '25'
+put 'student_info', '2', 'gender', 'Female'
+```
+### 4. Retrieving Data
+- Display all records from the table: 
+  ```bash
+  scan 'student_info'
+  ```
+- Verify the table creation:
+```bash
+get 'student_info', '1'
+```
+
+### 5. Updating Records
+- Update the age of the student
+```bash
+put 'student_info', '1', 'age', '23'
+
+```
+
+### 6. Deleting Data
+- Delete a specific column (e.g., first name of student 1)
+  ```bash
+  delete 'student_info', '1', 'name:first'
+  ```
+- Delete an entire row:
+```bash
+deleteall 'student_info', '1'
+```
+### 7. Dropping the Table (Additional)
+- Disable the table before deleting: 
+  ```bash
+  disable 'student_info'
+  ```
+- drop 'student_info'
+```bash
+drop 'student_info'
+```
+- Verify that the table has been deleted:
+```bash
+list
+```
+
+### Resources
+- LAB3.pdf file -
