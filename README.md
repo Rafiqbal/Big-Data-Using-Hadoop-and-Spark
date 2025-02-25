@@ -206,4 +206,76 @@ list
 ```
 
 ### Resources
-- LAB3.pdf file -
+- LAB3.pdf file - https://github.com/Rafiqbal/Big-Data-Using-Hadoop-and-
+Spark/blob/main/LAB3.pdf
+
+# Lab 4: Apache Spark & HDFS File System  
+
+## Objective  
+This lab focuses on **using Apache Spark with HDFS** to process large datasets efficiently. The goal is to learn how to:  
+- **Upload data to HDFS**  
+- **Run a Hadoop MapReduce job**  
+- **Execute Spark commands and store output**  
+
+## Technologies Used  
+- **Apache Spark**  
+- **Hadoop MapReduce**  
+- **HDFS (Hadoop Distributed File System)**  
+- **Cloudera VM**  
+- **Linux Command Line (Terminal)**  
+
+## Steps & Commands  
+
+### 1. Uploading Data to HDFS  
+- Create an HDFS directory named `Sparkdata`:  
+  ```bash
+  hdfs dfs -mkdir /Sparkdata
+  ```
+- Verify the directory creation:
+```bash
+hdfs dfs -ls /
+```
+- Upload hivedata.txt into the HDFS directory:
+```bash
+dfs dfs -put hivedata.txt /Sparkdata/
+```
+- Check the uploaded file in HDFS:
+```bash
+hdfs dfs -ls /Sparkdata
+```
+### 2. Running Hadoop MapReduce Job
+- Execute a Hadoop MapReduce job and store output in my_spark_output1:
+```bash
+hadoop jar /usr/lib/hadoop-mapreduce/hadoop-mapreduce-examples.jar wordcount /Sparkdata/hivedata.txt /wordcount_output
+```
+- Verify the output directory:
+``` bash
+hdfs dfs -ls /wordcount_output
+```
+- View the MapReduce job result:
+```bash
+hdfs dfs -cat /wordcount_output/part-r-00000
+```
+### 3. Running Apache Spark
+- Start the Spark shell:
+```bash
+spark-shell
+```
+- Load data into Spark and store the output in my_spark_output2:
+```scala
+val data = sc.textFile("hdfs:///Sparkdata/hivedata.txt")
+val wordCounts = data.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey(_ + _)
+wordCounts.saveAsTextFile("hdfs:///spark_output")
+```
+- Verify the Spark output directory:
+```bash
+hdfs dfs -ls /spark_output
+```
+- View the output of the Spark job:
+```bash
+hdfs dfs -cat /spark_output/part-00000
+```
+Resources 
+- LAB4.pdf - 
+
+
