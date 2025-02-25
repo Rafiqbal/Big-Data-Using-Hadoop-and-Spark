@@ -276,6 +276,6 @@ hdfs dfs -ls /spark_output
 hdfs dfs -cat /spark_output/part-00000
 ```
 Resources 
-- LAB4.pdf - 
+- LAB4.pdf - https://github.com/Rafiqbal/Big-Data-Using-Hadoop-and-Spark/blob/main/LAB4.pdf
 
 
